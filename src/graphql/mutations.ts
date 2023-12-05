@@ -16,7 +16,10 @@ export const registerAccount = async ({
   >({
     query: /* GraphQL */ `
       mutation RegisterAccountMutation($input: RegisterUser!) {
-        RegisterAccount(input: $input)
+        registerUser(input: $input){
+          message
+          status
+        }
       }
     `,
     variables: {
