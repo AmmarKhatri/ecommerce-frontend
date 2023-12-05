@@ -32,7 +32,7 @@ const useAuthContext = () => useContext(AuthContext);
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { accessToken }: Tokens = new CurrentToken().get();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(accessToken));
-  const [loadingAuth, setLoadingAuth] = useState(false);
+//   const [loadingAuth, setLoadingAuth] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(Boolean(accessToken));
@@ -48,7 +48,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   // }, [isLoggedIn]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AuthContext.Provider >
       {children}
     </AuthContext.Provider>
   );
