@@ -19,7 +19,7 @@ export const graphQlApiHandler = async <Input, Output = {}>({
   > => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/query`,
+        `http://localhost:3000/query`,
         {
           query: query,
           variables,

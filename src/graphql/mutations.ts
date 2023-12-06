@@ -1,5 +1,5 @@
 import { graphQlApiHandler } from "@/lib/helper";
-import { Mutation, RegisterUser } from "@/types/graphql";
+import { LoginUser, Mutation, RegisterUser } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -11,7 +11,7 @@ export const registerAccount = async ({
       input: RegisterUser;
     },
     {
-      RegisterAccount: Mutation["registerUser"];
+      registerUser: Mutation["registerUser"];
     }
   >({
     query: /* GraphQL */ `
@@ -31,3 +31,34 @@ export const registerAccount = async ({
     },
   });
 };
+
+export const loginUser = async ({
+  email,
+  password,
+}: LoginUser) => {
+  return await graphQlApiHandler<
+    {
+      input: LoginUser;
+    },
+    {
+      loginUser: Mutation["loginUser"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation LoginUserMutation($input: LoginUser!) {
+        loginUser(input: $input){
+          message
+          status
+          token
+        }
+      }
+    `,
+    variables: {
+      input: {
+        email,
+        password,
+      },
+    },
+  });
+};
+

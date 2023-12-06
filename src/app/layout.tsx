@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import './globals.css'
-import { AuthProvider } from '@/context/AuthContext'
-
-const inter = Inter({ subsets: ['latin'] })
+import { Toaster } from '@/components/ui/toaster'
+require('dotenv').config();
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ["300", "400", "500", "600", "700", "800"]
+})
 
 export const metadata: Metadata = {
   title: 'Ecommerce DBMS',
@@ -17,9 +20,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <AuthProvider>
-        <body className={inter.className}>{children}</body>
-      </AuthProvider>
+        <body className={montserrat.className}>
+          <main>
+            {children}
+            <Toaster/>
+          </main>
+        </body>
     </html>
   )
 }
