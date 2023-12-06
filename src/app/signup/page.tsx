@@ -40,7 +40,6 @@ export default function SignUp() {
           })
           // reroute to login
           router.push('/login');
-          //window.location.href = '/login';
         }
       } else {
         console.error("GraphQL response is missing data:", response);
@@ -48,7 +47,7 @@ export default function SignUp() {
       }
     } catch (error) {
       // Handle errors here
-      console.error("Error during sign-up:", error);
+      console.error("Error:", error);
     }
   }
 

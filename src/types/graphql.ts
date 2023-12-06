@@ -15,6 +15,45 @@ export interface Scalars {
   Float: { input: number; output: number; }
 }
 
+export interface AddUserInfo {
+  dob: Scalars['String']['input'];
+  first_name: Scalars['String']['input'];
+  last_name: Scalars['String']['input'];
+  phone_number: Scalars['String']['input'];
+}
+
+export interface AddUserInfoResponse {
+  __typename?: 'AddUserInfoResponse';
+  message: Scalars['String']['output'];
+  private_info?: Maybe<PrivateUserInfo>;
+  status: Scalars['Int']['output'];
+}
+
+export interface EditUserInfo {
+  dob?: InputMaybe<Scalars['String']['input']>;
+  first_name?: InputMaybe<Scalars['String']['input']>;
+  last_name?: InputMaybe<Scalars['String']['input']>;
+  phone_number?: InputMaybe<Scalars['String']['input']>;
+}
+
+export interface FetchUserPrivateInfoResponse {
+  __typename?: 'FetchUserPrivateInfoResponse';
+  message: Scalars['String']['output'];
+  private_info?: Maybe<PrivateUserInfo>;
+  status: Scalars['Int']['output'];
+}
+
+export interface FetchUserPublicInfo {
+  user_id: Scalars['Int']['input'];
+}
+
+export interface FetchUserPublicInfoResponse {
+  __typename?: 'FetchUserPublicInfoResponse';
+  message: Scalars['String']['output'];
+  public_info?: Maybe<PublicUserInfo>;
+  status: Scalars['Int']['output'];
+}
+
 export interface LoginUser {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -29,8 +68,20 @@ export interface LoginUserResponse {
 
 export interface Mutation {
   __typename?: 'Mutation';
+  addUserInfo: AddUserInfoResponse;
+  editUserInfo: FetchUserPrivateInfoResponse;
   loginUser: LoginUserResponse;
   registerUser: RegisterUserResponse;
+}
+
+
+export interface MutationAddUserInfoArgs {
+  input?: InputMaybe<AddUserInfo>;
+}
+
+
+export interface MutationEditUserInfoArgs {
+  input?: InputMaybe<EditUserInfo>;
 }
 
 
@@ -43,6 +94,36 @@ export interface MutationRegisterUserArgs {
   input?: InputMaybe<RegisterUser>;
 }
 
+export interface PrivateUserInfo {
+  __typename?: 'PrivateUserInfo';
+  dob?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  first_name?: Maybe<Scalars['String']['output']>;
+  last_name?: Maybe<Scalars['String']['output']>;
+  onboard: Scalars['Boolean']['output'];
+  phone_number?: Maybe<Scalars['String']['output']>;
+  role: Scalars['String']['output'];
+}
+
+export interface PublicUserInfo {
+  __typename?: 'PublicUserInfo';
+  first_name?: Maybe<Scalars['String']['output']>;
+  last_name?: Maybe<Scalars['String']['output']>;
+  role: Scalars['String']['output'];
+}
+
+export interface Query {
+  __typename?: 'Query';
+  fetchUserPrivateInfo: FetchUserPrivateInfoResponse;
+  fetchUserPublicInfo: FetchUserPublicInfoResponse;
+  isOnboarded: IsOnboardedResponse;
+}
+
+
+export interface QueryFetchUserPublicInfoArgs {
+  input?: InputMaybe<FetchUserPublicInfo>;
+}
+
 export interface RegisterUser {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -51,6 +132,12 @@ export interface RegisterUser {
 
 export interface RegisterUserResponse {
   __typename?: 'RegisterUserResponse';
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+}
+
+export interface IsOnboardedResponse {
+  __typename?: 'isOnboardedResponse';
   message: Scalars['String']['output'];
   status: Scalars['Int']['output'];
 }
@@ -126,26 +213,67 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddUserInfo: AddUserInfo;
+  AddUserInfoResponse: ResolverTypeWrapper<AddUserInfoResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  EditUserInfo: EditUserInfo;
+  FetchUserPrivateInfoResponse: ResolverTypeWrapper<FetchUserPrivateInfoResponse>;
+  FetchUserPublicInfo: FetchUserPublicInfo;
+  FetchUserPublicInfoResponse: ResolverTypeWrapper<FetchUserPublicInfoResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LoginUser: LoginUser;
   LoginUserResponse: ResolverTypeWrapper<LoginUserResponse>;
   Mutation: ResolverTypeWrapper<{}>;
+  PrivateUserInfo: ResolverTypeWrapper<PrivateUserInfo>;
+  PublicUserInfo: ResolverTypeWrapper<PublicUserInfo>;
+  Query: ResolverTypeWrapper<{}>;
   RegisterUser: RegisterUser;
   RegisterUserResponse: ResolverTypeWrapper<RegisterUserResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  isOnboardedResponse: ResolverTypeWrapper<IsOnboardedResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddUserInfo: AddUserInfo;
+  AddUserInfoResponse: AddUserInfoResponse;
   Boolean: Scalars['Boolean']['output'];
+  EditUserInfo: EditUserInfo;
+  FetchUserPrivateInfoResponse: FetchUserPrivateInfoResponse;
+  FetchUserPublicInfo: FetchUserPublicInfo;
+  FetchUserPublicInfoResponse: FetchUserPublicInfoResponse;
   Int: Scalars['Int']['output'];
   LoginUser: LoginUser;
   LoginUserResponse: LoginUserResponse;
   Mutation: {};
+  PrivateUserInfo: PrivateUserInfo;
+  PublicUserInfo: PublicUserInfo;
+  Query: {};
   RegisterUser: RegisterUser;
   RegisterUserResponse: RegisterUserResponse;
   String: Scalars['String']['output'];
+  isOnboardedResponse: IsOnboardedResponse;
+};
+
+export type AddUserInfoResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddUserInfoResponse'] = ResolversParentTypes['AddUserInfoResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  private_info?: Resolver<Maybe<ResolversTypes['PrivateUserInfo']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FetchUserPrivateInfoResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FetchUserPrivateInfoResponse'] = ResolversParentTypes['FetchUserPrivateInfoResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  private_info?: Resolver<Maybe<ResolversTypes['PrivateUserInfo']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FetchUserPublicInfoResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FetchUserPublicInfoResponse'] = ResolversParentTypes['FetchUserPublicInfoResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  public_info?: Resolver<Maybe<ResolversTypes['PublicUserInfo']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LoginUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserResponse'] = ResolversParentTypes['LoginUserResponse']> = {
@@ -156,8 +284,34 @@ export type LoginUserResponseResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addUserInfo?: Resolver<ResolversTypes['AddUserInfoResponse'], ParentType, ContextType, Partial<MutationAddUserInfoArgs>>;
+  editUserInfo?: Resolver<ResolversTypes['FetchUserPrivateInfoResponse'], ParentType, ContextType, Partial<MutationEditUserInfoArgs>>;
   loginUser?: Resolver<ResolversTypes['LoginUserResponse'], ParentType, ContextType, Partial<MutationLoginUserArgs>>;
   registerUser?: Resolver<ResolversTypes['RegisterUserResponse'], ParentType, ContextType, Partial<MutationRegisterUserArgs>>;
+};
+
+export type PrivateUserInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PrivateUserInfo'] = ResolversParentTypes['PrivateUserInfo']> = {
+  dob?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  onboard?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  phone_number?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PublicUserInfoResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublicUserInfo'] = ResolversParentTypes['PublicUserInfo']> = {
+  first_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  last_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  fetchUserPrivateInfo?: Resolver<ResolversTypes['FetchUserPrivateInfoResponse'], ParentType, ContextType>;
+  fetchUserPublicInfo?: Resolver<ResolversTypes['FetchUserPublicInfoResponse'], ParentType, ContextType, Partial<QueryFetchUserPublicInfoArgs>>;
+  isOnboarded?: Resolver<ResolversTypes['isOnboardedResponse'], ParentType, ContextType>;
 };
 
 export type RegisterUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserResponse'] = ResolversParentTypes['RegisterUserResponse']> = {
@@ -166,9 +320,22 @@ export type RegisterUserResponseResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type IsOnboardedResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['isOnboardedResponse'] = ResolversParentTypes['isOnboardedResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
+  AddUserInfoResponse?: AddUserInfoResponseResolvers<ContextType>;
+  FetchUserPrivateInfoResponse?: FetchUserPrivateInfoResponseResolvers<ContextType>;
+  FetchUserPublicInfoResponse?: FetchUserPublicInfoResponseResolvers<ContextType>;
   LoginUserResponse?: LoginUserResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  PrivateUserInfo?: PrivateUserInfoResolvers<ContextType>;
+  PublicUserInfo?: PublicUserInfoResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
   RegisterUserResponse?: RegisterUserResponseResolvers<ContextType>;
+  isOnboardedResponse?: IsOnboardedResponseResolvers<ContextType>;
 };
 

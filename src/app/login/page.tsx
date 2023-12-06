@@ -24,7 +24,6 @@ export default function Login() {
         let payload
         if (token){ //set token in localStorage
           setAuthToken(token)
-          var secret = '0741fdcec7a6607b694aa44546b4eafd'
           payload = jwt.decode(token)
           console.log("Token:" + payload.role)
         }
@@ -46,7 +45,6 @@ export default function Login() {
           })
           // reroute to login
           router.push('/dashboard');
-          //window.location.href = '/login';
         }
       } else {
         console.error("GraphQL response is missing data:", response);
@@ -54,7 +52,7 @@ export default function Login() {
       }
     } catch (error) {
       // Handle errors here
-      console.error("Error during sign-up:", error);
+      console.error("Error:", error);
     }
   }
   return (

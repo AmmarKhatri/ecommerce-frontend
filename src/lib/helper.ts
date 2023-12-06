@@ -1,3 +1,4 @@
+import { getAuthToken } from "@/context/AuthStorage";
 import { GraphQLResult } from "@/types";
 import axios from "axios";
 interface Props<T> {
@@ -5,7 +6,18 @@ interface Props<T> {
     variables?: T;
     headers?: any;
 }
-
+export function CheckAuth(){
+  const token = getAuthToken()
+  if(token){
+      if (token === ""){
+        return false
+      } else {
+        return true
+      }
+  } else {
+    return false
+  }
+}
 export const graphQlApiHandler = async <Input, Output = {}>({
     query,
     variables,

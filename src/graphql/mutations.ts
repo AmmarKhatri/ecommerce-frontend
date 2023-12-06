@@ -1,5 +1,6 @@
+import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { LoginUser, Mutation, RegisterUser } from "@/types/graphql";
+import { AddUserInfo, LoginUser, Mutation, RegisterUser } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -59,6 +60,42 @@ export const loginUser = async ({
         password,
       },
     },
+  });
+};
+export const addUserInfo = async ({
+  first_name,
+  last_name,
+  dob,
+  phone_number
+}: AddUserInfo, { headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    {
+      input: AddUserInfo;
+    },
+    {
+      addUserInfo: Mutation["addUserInfo"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation AddUserInfoMutation($input: AddUserInfo!) {
+        addUserInfo(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        first_name,
+        last_name,
+        dob,
+        phone_number
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
   });
 };
 
