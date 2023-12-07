@@ -6,11 +6,14 @@ import { getAuthToken } from "@/context/AuthStorage";
 import { isOnboarded } from "@/graphql/queries"
 import { useEffect, useState } from "react"
 import { CheckAuth } from "@/lib/helper";
-
+import SellerDashboard from "@/components/dashboards/sellerDashboard";
+import BuyerDashboard from "@/components/dashboards/buyerDashboard";
+const jwt = require('jsonwebtoken')
 export default function Dashboard() {
   // ALL DIFFERENT DASHBOARDS ARE SELECTED HERE
   const [isUserOnboarded, setIsOnboarded] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [role, setRole] = useState("")
   const router = useRouter();
   async function CheckOnboarded() {
     try {
@@ -34,19 +37,27 @@ export default function Dashboard() {
         console.error("Error:", error);
     }
   }
+  let payload;
   useEffect(()=> {
     let isAUTHENTICATED = CheckAuth()
     if (!isAUTHENTICATED){
         router.push('/login')
     }
     CheckOnboarded()
+    if (isUserOnboarded) {
+      const token = getAuthToken()
+      payload = jwt.decode(token)
+      setRole(payload?.role)
+    }
   })
   return (
     <div>
         {
             isLoading ? <Loader/>:
             !isUserOnboarded ? <Onboard/>:
-            <></>
+            role === "seller"? <SellerDashboard/>:
+            role === "buyer" ? <BuyerDashboard/>:
+            <Loader/>
         }
     </div>
   )
