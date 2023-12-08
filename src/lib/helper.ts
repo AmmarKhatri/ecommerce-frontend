@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 import { getAuthToken } from "@/context/AuthStorage";
 import { GraphQLResult } from "@/types";
 import axios from "axios";
@@ -5,6 +6,17 @@ interface Props<T> {
     query: string;
     variables?: T;
     headers?: any;
+}
+export function validateFields({image, description, name, quantity, price}: any){
+  if (image ===""|| description ===""|| name ===""|| quantity === 0|| price === 0) {
+      toast({
+          variant: "destructive",
+          title: "Invalid Fields",
+          description: "Please enter all valid fields"
+      })
+      return false
+  }
+  return true
 }
 export function CheckAuth(){
   const token = getAuthToken()

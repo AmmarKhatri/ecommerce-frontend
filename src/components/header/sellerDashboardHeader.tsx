@@ -3,8 +3,9 @@ import { Button } from "../ui/button"
 import { useRouter } from "next/navigation"
 import { deleteAuthToken } from "@/context/AuthStorage"
 
-export default function SellerDashboardHeader() {
+export default function SellerDashboardHeader({isEnlisting }: any) {
   const router = useRouter();
+  console.log("Props "+isEnlisting )
     async function handleLogout() {
         deleteAuthToken()
         router.push('/')
@@ -15,6 +16,7 @@ export default function SellerDashboardHeader() {
           <span className=" text-3xl font-bold">Seller Dashboard</span>
         </div>
         <div className="items-center space-x-4">
+          {!isEnlisting? <Button size="sm" onClick={()=>{router.push("/enlist")}}>+ Enlist Product</Button>:<></>}
           <Button size="sm" onClick={handleLogout}>Logout</Button>
         </div>
       </nav>

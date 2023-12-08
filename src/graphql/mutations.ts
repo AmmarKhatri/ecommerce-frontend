@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { AddUserInfo, LoginUser, Mutation, RegisterUser } from "@/types/graphql";
+import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -98,4 +98,107 @@ export const addUserInfo = async ({
     }
   });
 };
+
+export const enlistProduct = async ({
+  name,
+  description,
+  image_url,
+  price,
+  quantity
+}: EnlistProduct, { headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    {
+      input: EnlistProduct;
+    },
+    {
+      enlistProduct: Mutation["enlistProduct"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation EnlistProductMutation($input: EnlistProduct!) {
+        enlistProduct(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        name,
+        description,
+        image_url,
+        price,
+        quantity
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+};
+
+export const delistProduct = async ({
+  id
+}: DelistProduct, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: DelistProduct;
+    },
+    {
+      delistProduct: Mutation["delistProduct"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation EnlistProductMutation($input: DelistProduct!) {
+        delistProduct(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        id,
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
+
+export const changeInventory = async ({
+  product_id,
+  quantity
+}: ChangeInventory, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: ChangeInventory;
+    },
+    {
+      changeInventory: Mutation["changeInventory"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation EnlistProductMutation($input: ChangeInventory!) {
+        changeInventory(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        product_id,
+        quantity
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
 

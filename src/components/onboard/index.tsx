@@ -1,13 +1,13 @@
 'use client';
 import { addUserInfo } from "@/graphql/mutations";
 import { Button } from "../ui/button";
-import react from 'react'
+import {useState} from 'react'
 import { toast } from "../ui/use-toast";
 export default function Onboard() {
-    const [fname, setFname] = react.useState("")
-    const [lname, setLname] = react.useState("")
-    const [phone, setPhone] = react.useState("")
-    const [dob, setDob] = react.useState("")
+    const [fname, setFname] = useState("")
+    const [lname, setLname] = useState("")
+    const [phone, setPhone] = useState("")
+    const [dob, setDob] = useState("")
     async function handleOnboard() {
         try {
             const response = await addUserInfo({
@@ -88,8 +88,3 @@ export default function Onboard() {
       </div>
     )
   }
-
-function useState(arg0: string): [any, any] {
-    throw new Error("Function not implemented.");
-}
-  

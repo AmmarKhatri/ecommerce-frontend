@@ -3,9 +3,10 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 import { registerAccount } from '@/graphql/mutations'
+import { CheckAuth } from '@/lib/helper'
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 
 export default function SignUp() {
@@ -50,7 +51,12 @@ export default function SignUp() {
       console.error("Error:", error);
     }
   }
-
+  useEffect(()=>{
+    let isAUTHENTICATED = CheckAuth()
+    if (isAUTHENTICATED){
+        router.push('/dashboard')
+    }
+  })
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">

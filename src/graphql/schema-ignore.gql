@@ -71,14 +71,67 @@ type FetchUserPrivateInfoResponse {
   message: String!
   private_info: PrivateUserInfo
 }
+#Product API calls
+type Product {
+  id: Int!
+  seller_id: Int!
+  name: String!
+  description: String!
+  image_url: String!
+  price: Float!
+  quantity: String!
+  created_at: String!
+  updated_at: String!
+}
+input EnlistProduct {
+  name: String!
+  description: String!
+  image_url: String!
+  quantity: Int!
+  price: Float!
+}
+type EnlistProductResponse {
+  status: Int!
+  message: String!
+  product: Product
+}
+#remove product
+input DelistProduct {
+  id: Int!
+}
+type DelistProductResponse {
+  status: Int!
+  message: String!
+}
+#get enlisted products list
+type GetEnlistedProductsResponse {
+  status: Int!
+  message: String!
+  products: [Product!]
+}
+
+#change inventory
+input ChangeInventory {
+  product_id: Int!
+  quantity: Int!
+}
+type ChangeInventoryResponse {
+  status: Int!
+  message: String!
+}
+
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
   fetchUserPrivateInfo: FetchUserPrivateInfoResponse!
+  getEnlistedProducts: GetEnlistedProductsResponse!
 }
 type Mutation {
   addUserInfo(input: AddUserInfo): AddUserInfoResponse!
   registerUser(input: RegisterUser): RegisterUserResponse!
   loginUser(input: LoginUser): LoginUserResponse!
   editUserInfo(input: EditUserInfo): FetchUserPrivateInfoResponse!
+  enlistProduct(input: EnlistProduct): EnlistProductResponse!
+  delistProduct(input: DelistProduct): DelistProductResponse!
+  changeInventory(input: ChangeInventory): ChangeInventoryResponse!
 }

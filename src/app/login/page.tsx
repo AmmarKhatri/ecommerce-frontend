@@ -4,9 +4,10 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { setAuthToken } from '@/context/AuthStorage';
 import { loginUser } from '@/graphql/mutations';
+import { CheckAuth } from '@/lib/helper';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 require('dotenv').config();
 export default function Login() {
   const [email, setEmail] = useState("")
@@ -55,6 +56,12 @@ export default function Login() {
       console.error("Error:", error);
     }
   }
+  useEffect(()=>{
+    let isAUTHENTICATED = CheckAuth()
+    if (isAUTHENTICATED){
+        router.push('/dashboard')
+    }
+  })
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
