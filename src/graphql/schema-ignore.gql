@@ -119,12 +119,18 @@ type ChangeInventoryResponse {
   status: Int!
   message: String!
 }
-
+type TrendingLatestProducts {
+  status: Int!
+  message: String!
+  trending: [Product!]
+  latest: [Product!]
+}
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
   fetchUserPrivateInfo: FetchUserPrivateInfoResponse!
   getEnlistedProducts: GetEnlistedProductsResponse!
+  fetchProducts: TrendingLatestProducts!
 }
 type Mutation {
   addUserInfo(input: AddUserInfo): AddUserInfoResponse!

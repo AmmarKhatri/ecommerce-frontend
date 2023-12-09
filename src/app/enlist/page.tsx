@@ -15,10 +15,7 @@ export default function EnlistSellerProduct(){
     const [price, setPrice] = useState<number>()
     const handlePriceChange = (e: { currentTarget: { value: any; }; }) => {
         const inputValue = e.currentTarget.value;
-        // Check if the input is a valid number with up to two decimal places
-        if (/^\d*\.?\d{0,2}$/.test(inputValue) || inputValue === '') {
-          setPrice(parseFloat(inputValue));
-        }
+        setPrice(inputValue)
       };
       const router = useRouter();
     async function handleEnlist(){

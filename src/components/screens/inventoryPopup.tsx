@@ -36,9 +36,9 @@ export default function InventoryPopup({product_id, curr, index, products, setPr
                     description: message
                 })
                 setDisabled(true)
-                let a = products
-                a[index].quantity = quantity
-                setProducts(a)
+                var a = products
+                a[index].quantity = inv
+                setProducts([...a])
             }
             setIsLoading(false)
         } else {
@@ -46,7 +46,6 @@ export default function InventoryPopup({product_id, curr, index, products, setPr
             console.log(response);
         }
     }
-  
   return (
     <div>
       <DialogContent>

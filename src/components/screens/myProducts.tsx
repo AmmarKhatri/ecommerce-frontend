@@ -122,6 +122,6 @@ export default function MyProducts() {
                     ))
                 }
             </TableBody>
-        </Table>: <div>Please enlist a few products!</div>
+        </Table>: <div className=" text-center text-red-600 mt-96 font-bold">You have not registered any products, please enlist a few products!</div>
     );
 }

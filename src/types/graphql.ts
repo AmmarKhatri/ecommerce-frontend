@@ -188,6 +188,7 @@ export interface PublicUserInfo {
 
 export interface Query {
   __typename?: 'Query';
+  fetchProducts: TrendingLatestProducts;
   fetchUserPrivateInfo: FetchUserPrivateInfoResponse;
   fetchUserPublicInfo: FetchUserPublicInfoResponse;
   getEnlistedProducts: GetEnlistedProductsResponse;
@@ -209,6 +210,14 @@ export interface RegisterUserResponse {
   __typename?: 'RegisterUserResponse';
   message: Scalars['String']['output'];
   status: Scalars['Int']['output'];
+}
+
+export interface TrendingLatestProducts {
+  __typename?: 'TrendingLatestProducts';
+  latest?: Maybe<Array<Product>>;
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+  trending?: Maybe<Array<Product>>;
 }
 
 export interface IsOnboardedResponse {
@@ -314,6 +323,7 @@ export type ResolversTypes = {
   RegisterUser: RegisterUser;
   RegisterUserResponse: ResolverTypeWrapper<RegisterUserResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  TrendingLatestProducts: ResolverTypeWrapper<TrendingLatestProducts>;
   isOnboardedResponse: ResolverTypeWrapper<IsOnboardedResponse>;
 };
 
@@ -345,6 +355,7 @@ export type ResolversParentTypes = {
   RegisterUser: RegisterUser;
   RegisterUserResponse: RegisterUserResponse;
   String: Scalars['String']['output'];
+  TrendingLatestProducts: TrendingLatestProducts;
   isOnboardedResponse: IsOnboardedResponse;
 };
 
@@ -444,6 +455,7 @@ export type PublicUserInfoResolvers<ContextType = any, ParentType extends Resolv
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  fetchProducts?: Resolver<ResolversTypes['TrendingLatestProducts'], ParentType, ContextType>;
   fetchUserPrivateInfo?: Resolver<ResolversTypes['FetchUserPrivateInfoResponse'], ParentType, ContextType>;
   fetchUserPublicInfo?: Resolver<ResolversTypes['FetchUserPublicInfoResponse'], ParentType, ContextType, Partial<QueryFetchUserPublicInfoArgs>>;
   getEnlistedProducts?: Resolver<ResolversTypes['GetEnlistedProductsResponse'], ParentType, ContextType>;
@@ -453,6 +465,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type RegisterUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserResponse'] = ResolversParentTypes['RegisterUserResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type TrendingLatestProductsResolvers<ContextType = any, ParentType extends ResolversParentTypes['TrendingLatestProducts'] = ResolversParentTypes['TrendingLatestProducts']> = {
+  latest?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  trending?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -477,6 +497,7 @@ export type Resolvers<ContextType = any> = {
   PublicUserInfo?: PublicUserInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RegisterUserResponse?: RegisterUserResponseResolvers<ContextType>;
+  TrendingLatestProducts?: TrendingLatestProductsResolvers<ContextType>;
   isOnboardedResponse?: IsOnboardedResponseResolvers<ContextType>;
 };
 

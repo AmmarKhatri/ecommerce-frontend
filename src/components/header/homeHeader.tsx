@@ -1,13 +1,13 @@
 'use client';
-import react from "react";
+import {useEffect, useState} from "react";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { CheckAuth } from "@/lib/helper";
 
 const HomePageHeader = () => {
-  const [isLoggedIn, setIsLoggedIn] = react.useState(false)
-  const [loadingAuth, setLoadingAuth] = react.useState(true)
-  react.useEffect(()=> {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loadingAuth, setLoadingAuth] = useState(true)
+  useEffect(()=> {
     let isAUTHENTICATED = CheckAuth()
     console.log("Called check auth: "+isAUTHENTICATED)
     if (isAUTHENTICATED){
