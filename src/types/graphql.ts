@@ -193,11 +193,17 @@ export interface Query {
   fetchUserPublicInfo: FetchUserPublicInfoResponse;
   getEnlistedProducts: GetEnlistedProductsResponse;
   isOnboarded: IsOnboardedResponse;
+  searchProducts: SearchProductResponse;
 }
 
 
 export interface QueryFetchUserPublicInfoArgs {
   input?: InputMaybe<FetchUserPublicInfo>;
+}
+
+
+export interface QuerySearchProductsArgs {
+  input?: InputMaybe<SearchProduct>;
 }
 
 export interface RegisterUser {
@@ -209,6 +215,17 @@ export interface RegisterUser {
 export interface RegisterUserResponse {
   __typename?: 'RegisterUserResponse';
   message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+}
+
+export interface SearchProduct {
+  text: Scalars['String']['input'];
+}
+
+export interface SearchProductResponse {
+  __typename?: 'SearchProductResponse';
+  message: Scalars['String']['output'];
+  products?: Maybe<Array<Product>>;
   status: Scalars['Int']['output'];
 }
 
@@ -322,6 +339,8 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   RegisterUser: RegisterUser;
   RegisterUserResponse: ResolverTypeWrapper<RegisterUserResponse>;
+  SearchProduct: SearchProduct;
+  SearchProductResponse: ResolverTypeWrapper<SearchProductResponse>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   TrendingLatestProducts: ResolverTypeWrapper<TrendingLatestProducts>;
   isOnboardedResponse: ResolverTypeWrapper<IsOnboardedResponse>;
@@ -354,6 +373,8 @@ export type ResolversParentTypes = {
   Query: {};
   RegisterUser: RegisterUser;
   RegisterUserResponse: RegisterUserResponse;
+  SearchProduct: SearchProduct;
+  SearchProductResponse: SearchProductResponse;
   String: Scalars['String']['output'];
   TrendingLatestProducts: TrendingLatestProducts;
   isOnboardedResponse: IsOnboardedResponse;
@@ -460,10 +481,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   fetchUserPublicInfo?: Resolver<ResolversTypes['FetchUserPublicInfoResponse'], ParentType, ContextType, Partial<QueryFetchUserPublicInfoArgs>>;
   getEnlistedProducts?: Resolver<ResolversTypes['GetEnlistedProductsResponse'], ParentType, ContextType>;
   isOnboarded?: Resolver<ResolversTypes['isOnboardedResponse'], ParentType, ContextType>;
+  searchProducts?: Resolver<ResolversTypes['SearchProductResponse'], ParentType, ContextType, Partial<QuerySearchProductsArgs>>;
 };
 
 export type RegisterUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserResponse'] = ResolversParentTypes['RegisterUserResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SearchProductResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SearchProductResponse'] = ResolversParentTypes['SearchProductResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -497,6 +526,7 @@ export type Resolvers<ContextType = any> = {
   PublicUserInfo?: PublicUserInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RegisterUserResponse?: RegisterUserResponseResolvers<ContextType>;
+  SearchProductResponse?: SearchProductResponseResolvers<ContextType>;
   TrendingLatestProducts?: TrendingLatestProductsResolvers<ContextType>;
   isOnboardedResponse?: IsOnboardedResponseResolvers<ContextType>;
 };

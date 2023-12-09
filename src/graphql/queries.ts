@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { Query } from "@/types/graphql";
+import { Query, SearchProduct } from "@/types/graphql";
 
 export const isOnboarded = async ({ headers }: { headers?: any }) => {
   return await graphQlApiHandler<
@@ -78,6 +78,33 @@ export const fetchProducts = async () => {
             created_at
           }
           trending {
+            id
+            name
+            description
+            quantity
+            price
+            image_url
+            created_at
+          }
+        }
+      }
+    `
+  });
+};
+
+export const searchProducts = async ({text}: SearchProduct, { headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    SearchProduct,
+    {
+      searchProducts: Query["searchProducts"];
+    }
+  >({
+    query: /* GraphQL */ `
+      query SearchProductsQuery {
+        searchProducts {
+          message
+          status
+          products {
             id
             name
             description

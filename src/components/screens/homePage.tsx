@@ -7,7 +7,7 @@ import { Product } from "@/types/graphql";
 import Link from "next/link";
 
 export default function HomePageBody(){
-    const [trendingP, setTrendingP] = useState<Product[]>([])
+  const [trendingP, setTrendingP] = useState<Product[]>([])
   const [latestP, setLatestP] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   async function LoadOrders() {
