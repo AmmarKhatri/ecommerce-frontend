@@ -80,6 +80,7 @@ export default function SellerPending(){
                     <TableHead className="w-[100px]">Product</TableHead>
                     <TableHead className="w-[150px]">Name</TableHead>
                     <TableHead>Buyer Name</TableHead>
+                    <TableHead>Delivery At</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>
@@ -96,6 +97,7 @@ export default function SellerPending(){
                         <TableCell><img src={prod.image_url} className=" w-10 h-10"/></TableCell>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>{prod.buyer_name}</TableCell>
+                        <TableCell>{prod.address}</TableCell>
                         <TableCell>{prod.status}</TableCell>
                         <TableCell className=" text-center">{prod.quantity}</TableCell>
                         <TableCell  className="text-right">${prod.price}</TableCell>
@@ -114,6 +116,6 @@ export default function SellerPending(){
                 ))
             }
         </TableBody>
-    </Table></div>: <div className=" text-center text-red-600 mt-96 font-bold">No pending orders!</div>}
+    </Table></div>: <div className=" text-center text-gray-800 mt-96 font-bold">No pending orders!</div>}
 </>)
 }

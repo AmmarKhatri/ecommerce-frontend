@@ -147,6 +147,7 @@ export const fetchOrderItemsForBuyer = async ({status}: FetchOrderItemsForBuyer,
             name
             order_reference
             price
+            address
             product_id
             quantity
             status
@@ -185,6 +186,7 @@ export const fetchOrderItemsForSeller = async ({status}: FetchOrderItemsForSelle
             buyer_name
             order_reference
             price
+            address
             product_id
             quantity
             status
@@ -197,6 +199,38 @@ export const fetchOrderItemsForSeller = async ({status}: FetchOrderItemsForSelle
         status
       },
     },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+};
+
+export const getAddresses = async ({ headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    {},
+    {
+      getAddresses: Query["getAddresses"];
+    }
+  >({
+    query: /* GraphQL */ `
+      query GetAddressesQuery() {
+        fetchOrderItemsForBuyer() {
+          message
+          status
+          addresses {
+            id
+            user_ref
+            add1
+            add2
+            city
+            postal_code
+            created_at
+            updated_at
+          }
+        }
+      }
+    `,
     headers:{
       'Authorization': "Bearer "+ getAuthToken(),
       ...headers,

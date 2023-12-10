@@ -41,13 +41,14 @@ export default function SellerCancelled(){
     return(
     <>
     {orderItems.length !== 0 ?<div><Table>
-        <TableCaption> Pending Orders List</TableCaption>
+        <TableCaption> Cancelled Orders List</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">Order ID</TableHead>
                     <TableHead className="w-[100px]">Product</TableHead>
                     <TableHead className="w-[150px]">Name</TableHead>
                     <TableHead>Buyer Name</TableHead>
+                    <TableHead>Delivery At</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>
@@ -62,6 +63,7 @@ export default function SellerCancelled(){
                         <TableCell><img src={prod.image_url} className=" w-10 h-10"/></TableCell>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>{prod.buyer_name}</TableCell>
+                        <TableCell>{prod.address}</TableCell>
                         <TableCell>{prod.status}</TableCell>
                         <TableCell className=" text-center">{prod.quantity}</TableCell>
                         <TableCell  className="text-right">${prod.price}</TableCell>

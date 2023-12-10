@@ -1,22 +1,52 @@
 'use client';
 import Tick from "@/components/extras/check";
 import BuyerDashboardHeader from "@/components/header/buyerDashboardHeader";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import useCart, { CartProduct } from "@/context/CartStorage";
 import { createOrder } from "@/graphql/mutations";
+import { getAddresses } from "@/graphql/queries";
+import { Address } from "@/types/graphql";
+import { useEffect, useState } from "react";
 export default function Cart(){
     const {cart, updateCart, removeProduct, clearCart} = useCart()
+    const [add, setAdd] = useState<Address[]>()
+    const [selAdd, setSelAdd] = useState(-1)
     // Calculate subtotal
     const subtotal = cart.reduce((total, product) => {
         return total + product.selected_qty * product.price;
     }, 0);
-
+    async function fetchAddresses(){
+        const response = await getAddresses({})
+        if ('data' in response && response.data.data?.getAddresses) {
+            const {message, status, addresses} = response.data.data?.getAddresses;
+            // Now you can use 'message' and 'status' as needed
+            console.log("Message:", message);
+            console.log("Status:", status);
+            // Add your logic here based on the response data
+            if (status !== 201){
+              toast({
+                variant: "destructive",
+                title: "Error: Status "+ status,
+                description: message
+              })
+            } else {
+                setAdd([...addresses])
+            }
+          } else {
+            console.error("GraphQL response is missing data:", response);
+            console.log(response);
+          }
+    }
+    useEffect(()=>{
+        fetchAddresses()
+    }, [])
     async function handleCheckout(){
         let list = []
         for(let i = 0; i < cart.length; i++){
             list.push([cart[i].id, cart[i].selected_qty])
         }
-        const response = await createOrder({cart: list},{})
+        const response = await createOrder({address: 1, cart: list},{})
         if ('data' in response && response.data.data?.placeOrder) {
             const {message, status, order_reference} = response.data.data?.placeOrder;
             // Now you can use 'message' and 'status' as needed
@@ -69,6 +99,7 @@ export default function Cart(){
     async function handleRemove(id: number){
         removeProduct(id)
     }
+
     return(
         <div>
             <BuyerDashboardHeader/>
@@ -112,7 +143,6 @@ export default function Cart(){
                                     <span>{product.selected_qty}</span>
                                     <button className=" bg-slate-200 px-1.5 rounded-full"onClick={()=>{handleAdd(product)}}>+</button>
                                 </div>
-
                                 <div>
                                     <button className="sm pt-4 px-5" onClick={()=>{handleRemove(product.id)}}>Remove</button>
                                 </div>
@@ -169,7 +199,16 @@ export default function Cart(){
                         Checkout
                     </button>
                     </div>
-
+                    <Select value={selAdd.toString()} onValueChange={(value: string)=> setSelAdd(parseInt(value))}>
+                        <SelectTrigger className="w-full mb-5">
+                            <SelectValue placeholder="Select an address" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {add?.map((address)=>(
+                                <SelectItem value={address.id.toString()}>{address.postal_code}, {address.add1}, {address.add2}, {address.city}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                     <div className="mt-6 text-center text-sm text-gray-500">
                     <p>
                         or 

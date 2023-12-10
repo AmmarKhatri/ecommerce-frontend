@@ -1,9 +1,12 @@
+import Star from "@/components/extras/star"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
 import { fetchOrderItemsForBuyer } from "@/graphql/queries"
 import { BuyerOrderItem } from "@/types/graphql"
 import { useEffect, useState } from "react"
+import RatingPopup from "../ratingPopup"
 
 export default function Fulfilled(){
     async function fetchOrderItems(){
@@ -49,9 +52,11 @@ export default function Fulfilled(){
                     <TableHead className="w-[100px]">Product</TableHead>
                     <TableHead className="w-[150px]">Name</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Shipping At</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>
                     <TableHead className="w-[100px] text-center">Total</TableHead>
+                    <TableHead className="w-[100px] text-center">Rate</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -62,10 +67,17 @@ export default function Fulfilled(){
                         <TableCell><img src={prod.image_url} className=" w-10 h-10"/></TableCell>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>{prod.status}</TableCell>
+                        <TableCell>{prod.address}</TableCell>
                         <TableCell className=" text-center">{prod.quantity}</TableCell>
                         <TableCell  className="text-right">${prod.price}</TableCell>
                         <TableCell  className="text-center">${(prod.price * prod.quantity).toFixed(2)}
                         </TableCell>
+                        <TableCell className="text-center"><Dialog>
+                                    <DialogTrigger>
+                                        <Star/>
+                                    </DialogTrigger>
+                                    <RatingPopup product_id={prod.product_id} order_id={prod.id} index={i} products={orderItems} setProducts={setOrderItems}/>
+                                </Dialog></TableCell>
                     </TableRow>
                 ))
             }

@@ -49,6 +49,7 @@ export default function Pending(){
                     <TableHead className="w-[100px]">Product</TableHead>
                     <TableHead className="w-[150px]">Name</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Shipping At</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>
                     <TableHead className="w-[100px] text-center">Total</TableHead>
@@ -62,6 +63,7 @@ export default function Pending(){
                         <TableCell><img src={prod.image_url} className=" w-10 h-10"/></TableCell>
                         <TableCell>{prod.name}</TableCell>
                         <TableCell>{prod.status}</TableCell>
+                        <TableCell>{prod.address}</TableCell>
                         <TableCell className=" text-center">{prod.quantity}</TableCell>
                         <TableCell  className="text-right">${prod.price}</TableCell>
                         <TableCell  className="text-center">${(prod.price * prod.quantity).toFixed(2)}
@@ -70,6 +72,6 @@ export default function Pending(){
                 ))
             }
         </TableBody>
-    </Table></div>: <div className=" text-center text-red-600 mt-96 font-bold">No pending orders!</div>}
+    </Table></div>: <div className=" text-center text-gray-800 mt-96 font-bold">No pending orders!</div>}
 </>)
 }

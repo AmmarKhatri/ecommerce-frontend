@@ -136,6 +136,7 @@ type SearchProductResponse {
 }
 #place an order
 input PlaceOrder {
+  address: Int!
   cart: [[Int]!]!
 }
 type PlaceOrderResponse {
@@ -152,6 +153,7 @@ type BuyerOrderItem {
   name: String!
   quantity: Int!
   status: String!
+  address: String!
   order_reference: Int!
   price: Float!
   image_url: String!
@@ -170,6 +172,7 @@ type SellerOrderItem {
   name: String!
   buyer_name: String!
   quantity: Int!
+  address: String!
   status: String!
   order_reference: Int!
   price: Float!
@@ -190,6 +193,53 @@ type HandleOrderResponse {
   message: String!
   status: Int!
 }
+input GiveRating {
+  order_id: Int!
+  product_id: Int!
+  rating: Int!
+  comment: String
+}
+type GiveRatingResponse {
+  message: String!
+  status: Int!
+}
+#addresses
+#adding a new address
+type Address {
+  id: Int!
+  user_ref: Int!
+  postal_code: Int!
+  add1: String!
+  add2: String
+  city: String!
+  created_at: String!
+  updated_at: String!
+}
+input AddAddress {
+  postal_code: Int!
+  add1: String!
+  add2: String
+  city: String!
+}
+type AddAddressResponse {
+  status: Int!
+  message: String!
+  address: Address!
+}
+#remove address
+input RemoveAddress {
+  id: Int!
+}
+type RemoveAddressResponse {
+  status: Int!
+  message: String!
+}
+#get addresses list
+type GetAddresses {
+  status: Int!
+  message: String!
+  addresses: [Address!]!
+}
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
@@ -203,8 +253,8 @@ type Query {
   fetchOrderItemsForSeller(
     input: FetchOrderItemsForSeller
   ): FetchOrderItemsForSellerResponse!
+  getAddresses: GetAddresses!
 }
-
 type Mutation {
   addUserInfo(input: AddUserInfo): AddUserInfoResponse!
   registerUser(input: RegisterUser): RegisterUserResponse!
@@ -215,4 +265,7 @@ type Mutation {
   changeInventory(input: ChangeInventory): ChangeInventoryResponse!
   placeOrder(input: PlaceOrder): PlaceOrderResponse!
   handleOrder(input: HandleOrder): HandleOrderResponse!
+  giveRating(input: GiveRating): GiveRatingResponse!
+  addAddress(input: AddAddress): AddAddressResponse!
+  removeAddress(input: RemoveAddress): RemoveAddressResponse!
 }

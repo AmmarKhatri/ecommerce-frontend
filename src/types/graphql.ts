@@ -15,6 +15,20 @@ export interface Scalars {
   Float: { input: number; output: number; }
 }
 
+export interface AddAddress {
+  add1: Scalars['String']['input'];
+  add2?: InputMaybe<Scalars['String']['input']>;
+  city: Scalars['String']['input'];
+  postal_code: Scalars['Int']['input'];
+}
+
+export interface AddAddressResponse {
+  __typename?: 'AddAddressResponse';
+  address: Address;
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+}
+
 export interface AddUserInfo {
   dob: Scalars['String']['input'];
   first_name: Scalars['String']['input'];
@@ -29,8 +43,21 @@ export interface AddUserInfoResponse {
   status: Scalars['Int']['output'];
 }
 
+export interface Address {
+  __typename?: 'Address';
+  add1: Scalars['String']['output'];
+  add2?: Maybe<Scalars['String']['output']>;
+  city: Scalars['String']['output'];
+  created_at: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  postal_code: Scalars['Int']['output'];
+  updated_at: Scalars['String']['output'];
+  user_ref: Scalars['Int']['output'];
+}
+
 export interface BuyerOrderItem {
   __typename?: 'BuyerOrderItem';
+  address: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   image_url: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -124,10 +151,30 @@ export interface FetchUserPublicInfoResponse {
   status: Scalars['Int']['output'];
 }
 
+export interface GetAddresses {
+  __typename?: 'GetAddresses';
+  addresses: Array<Address>;
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+}
+
 export interface GetEnlistedProductsResponse {
   __typename?: 'GetEnlistedProductsResponse';
   message: Scalars['String']['output'];
   products?: Maybe<Array<Product>>;
+  status: Scalars['Int']['output'];
+}
+
+export interface GiveRating {
+  comment?: InputMaybe<Scalars['String']['input']>;
+  order_id: Scalars['Int']['input'];
+  product_id: Scalars['Int']['input'];
+  rating: Scalars['Int']['input'];
+}
+
+export interface GiveRatingResponse {
+  __typename?: 'GiveRatingResponse';
+  message: Scalars['String']['output'];
   status: Scalars['Int']['output'];
 }
 
@@ -158,15 +205,23 @@ export interface LoginUserResponse {
 
 export interface Mutation {
   __typename?: 'Mutation';
+  addAddress: AddAddressResponse;
   addUserInfo: AddUserInfoResponse;
   changeInventory: ChangeInventoryResponse;
   delistProduct: DelistProductResponse;
   editUserInfo: FetchUserPrivateInfoResponse;
   enlistProduct: EnlistProductResponse;
+  giveRating: GiveRatingResponse;
   handleOrder: HandleOrderResponse;
   loginUser: LoginUserResponse;
   placeOrder: PlaceOrderResponse;
   registerUser: RegisterUserResponse;
+  removeAddress: RemoveAddressResponse;
+}
+
+
+export interface MutationAddAddressArgs {
+  input?: InputMaybe<AddAddress>;
 }
 
 
@@ -195,6 +250,11 @@ export interface MutationEnlistProductArgs {
 }
 
 
+export interface MutationGiveRatingArgs {
+  input?: InputMaybe<GiveRating>;
+}
+
+
 export interface MutationHandleOrderArgs {
   input?: InputMaybe<HandleOrder>;
 }
@@ -214,7 +274,13 @@ export interface MutationRegisterUserArgs {
   input?: InputMaybe<RegisterUser>;
 }
 
+
+export interface MutationRemoveAddressArgs {
+  input?: InputMaybe<RemoveAddress>;
+}
+
 export interface PlaceOrder {
+  address: Scalars['Int']['input'];
   cart: Array<Array<InputMaybe<Scalars['Int']['input']>>>;
 }
 
@@ -263,6 +329,7 @@ export interface Query {
   fetchProducts: TrendingLatestProducts;
   fetchUserPrivateInfo: FetchUserPrivateInfoResponse;
   fetchUserPublicInfo: FetchUserPublicInfoResponse;
+  getAddresses: GetAddresses;
   getEnlistedProducts: GetEnlistedProductsResponse;
   isOnboarded: IsOnboardedResponse;
   searchProducts: SearchProductResponse;
@@ -300,6 +367,16 @@ export interface RegisterUserResponse {
   status: Scalars['Int']['output'];
 }
 
+export interface RemoveAddress {
+  id: Scalars['Int']['input'];
+}
+
+export interface RemoveAddressResponse {
+  __typename?: 'RemoveAddressResponse';
+  message: Scalars['String']['output'];
+  status: Scalars['Int']['output'];
+}
+
 export interface SearchProduct {
   text: Scalars['String']['input'];
 }
@@ -313,6 +390,7 @@ export interface SearchProductResponse {
 
 export interface SellerOrderItem {
   __typename?: 'SellerOrderItem';
+  address: Scalars['String']['output'];
   buyer_name: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   image_url: Scalars['String']['output'];
@@ -409,8 +487,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddAddress: AddAddress;
+  AddAddressResponse: ResolverTypeWrapper<AddAddressResponse>;
   AddUserInfo: AddUserInfo;
   AddUserInfoResponse: ResolverTypeWrapper<AddUserInfoResponse>;
+  Address: ResolverTypeWrapper<Address>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   BuyerOrderItem: ResolverTypeWrapper<BuyerOrderItem>;
   ChangeInventory: ChangeInventory;
@@ -428,7 +509,10 @@ export type ResolversTypes = {
   FetchUserPublicInfo: FetchUserPublicInfo;
   FetchUserPublicInfoResponse: ResolverTypeWrapper<FetchUserPublicInfoResponse>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  GetAddresses: ResolverTypeWrapper<GetAddresses>;
   GetEnlistedProductsResponse: ResolverTypeWrapper<GetEnlistedProductsResponse>;
+  GiveRating: GiveRating;
+  GiveRatingResponse: ResolverTypeWrapper<GiveRatingResponse>;
   HandleOrder: HandleOrder;
   HandleOrderResponse: ResolverTypeWrapper<HandleOrderResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -443,6 +527,8 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   RegisterUser: RegisterUser;
   RegisterUserResponse: ResolverTypeWrapper<RegisterUserResponse>;
+  RemoveAddress: RemoveAddress;
+  RemoveAddressResponse: ResolverTypeWrapper<RemoveAddressResponse>;
   SearchProduct: SearchProduct;
   SearchProductResponse: ResolverTypeWrapper<SearchProductResponse>;
   SellerOrderItem: ResolverTypeWrapper<SellerOrderItem>;
@@ -453,8 +539,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddAddress: AddAddress;
+  AddAddressResponse: AddAddressResponse;
   AddUserInfo: AddUserInfo;
   AddUserInfoResponse: AddUserInfoResponse;
+  Address: Address;
   Boolean: Scalars['Boolean']['output'];
   BuyerOrderItem: BuyerOrderItem;
   ChangeInventory: ChangeInventory;
@@ -472,7 +561,10 @@ export type ResolversParentTypes = {
   FetchUserPublicInfo: FetchUserPublicInfo;
   FetchUserPublicInfoResponse: FetchUserPublicInfoResponse;
   Float: Scalars['Float']['output'];
+  GetAddresses: GetAddresses;
   GetEnlistedProductsResponse: GetEnlistedProductsResponse;
+  GiveRating: GiveRating;
+  GiveRatingResponse: GiveRatingResponse;
   HandleOrder: HandleOrder;
   HandleOrderResponse: HandleOrderResponse;
   Int: Scalars['Int']['output'];
@@ -487,12 +579,21 @@ export type ResolversParentTypes = {
   Query: {};
   RegisterUser: RegisterUser;
   RegisterUserResponse: RegisterUserResponse;
+  RemoveAddress: RemoveAddress;
+  RemoveAddressResponse: RemoveAddressResponse;
   SearchProduct: SearchProduct;
   SearchProductResponse: SearchProductResponse;
   SellerOrderItem: SellerOrderItem;
   String: Scalars['String']['output'];
   TrendingLatestProducts: TrendingLatestProducts;
   isOnboardedResponse: IsOnboardedResponse;
+};
+
+export type AddAddressResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddAddressResponse'] = ResolversParentTypes['AddAddressResponse']> = {
+  address?: Resolver<ResolversTypes['Address'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AddUserInfoResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddUserInfoResponse'] = ResolversParentTypes['AddUserInfoResponse']> = {
@@ -502,7 +603,20 @@ export type AddUserInfoResponseResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = {
+  add1?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  add2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  created_at?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  postal_code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updated_at?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user_ref?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type BuyerOrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['BuyerOrderItem'] = ResolversParentTypes['BuyerOrderItem']> = {
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   image_url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -561,9 +675,22 @@ export type FetchUserPublicInfoResponseResolvers<ContextType = any, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GetAddressesResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetAddresses'] = ResolversParentTypes['GetAddresses']> = {
+  addresses?: Resolver<Array<ResolversTypes['Address']>, ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GetEnlistedProductsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetEnlistedProductsResponse'] = ResolversParentTypes['GetEnlistedProductsResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GiveRatingResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GiveRatingResponse'] = ResolversParentTypes['GiveRatingResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -582,15 +709,18 @@ export type LoginUserResponseResolvers<ContextType = any, ParentType extends Res
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addAddress?: Resolver<ResolversTypes['AddAddressResponse'], ParentType, ContextType, Partial<MutationAddAddressArgs>>;
   addUserInfo?: Resolver<ResolversTypes['AddUserInfoResponse'], ParentType, ContextType, Partial<MutationAddUserInfoArgs>>;
   changeInventory?: Resolver<ResolversTypes['ChangeInventoryResponse'], ParentType, ContextType, Partial<MutationChangeInventoryArgs>>;
   delistProduct?: Resolver<ResolversTypes['DelistProductResponse'], ParentType, ContextType, Partial<MutationDelistProductArgs>>;
   editUserInfo?: Resolver<ResolversTypes['FetchUserPrivateInfoResponse'], ParentType, ContextType, Partial<MutationEditUserInfoArgs>>;
   enlistProduct?: Resolver<ResolversTypes['EnlistProductResponse'], ParentType, ContextType, Partial<MutationEnlistProductArgs>>;
+  giveRating?: Resolver<ResolversTypes['GiveRatingResponse'], ParentType, ContextType, Partial<MutationGiveRatingArgs>>;
   handleOrder?: Resolver<ResolversTypes['HandleOrderResponse'], ParentType, ContextType, Partial<MutationHandleOrderArgs>>;
   loginUser?: Resolver<ResolversTypes['LoginUserResponse'], ParentType, ContextType, Partial<MutationLoginUserArgs>>;
   placeOrder?: Resolver<ResolversTypes['PlaceOrderResponse'], ParentType, ContextType, Partial<MutationPlaceOrderArgs>>;
   registerUser?: Resolver<ResolversTypes['RegisterUserResponse'], ParentType, ContextType, Partial<MutationRegisterUserArgs>>;
+  removeAddress?: Resolver<ResolversTypes['RemoveAddressResponse'], ParentType, ContextType, Partial<MutationRemoveAddressArgs>>;
 };
 
 export type PlaceOrderResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlaceOrderResponse'] = ResolversParentTypes['PlaceOrderResponse']> = {
@@ -637,12 +767,19 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   fetchProducts?: Resolver<ResolversTypes['TrendingLatestProducts'], ParentType, ContextType>;
   fetchUserPrivateInfo?: Resolver<ResolversTypes['FetchUserPrivateInfoResponse'], ParentType, ContextType>;
   fetchUserPublicInfo?: Resolver<ResolversTypes['FetchUserPublicInfoResponse'], ParentType, ContextType, Partial<QueryFetchUserPublicInfoArgs>>;
+  getAddresses?: Resolver<ResolversTypes['GetAddresses'], ParentType, ContextType>;
   getEnlistedProducts?: Resolver<ResolversTypes['GetEnlistedProductsResponse'], ParentType, ContextType>;
   isOnboarded?: Resolver<ResolversTypes['isOnboardedResponse'], ParentType, ContextType>;
   searchProducts?: Resolver<ResolversTypes['SearchProductResponse'], ParentType, ContextType, Partial<QuerySearchProductsArgs>>;
 };
 
 export type RegisterUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RegisterUserResponse'] = ResolversParentTypes['RegisterUserResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RemoveAddressResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RemoveAddressResponse'] = ResolversParentTypes['RemoveAddressResponse']> = {
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -656,6 +793,7 @@ export type SearchProductResponseResolvers<ContextType = any, ParentType extends
 };
 
 export type SellerOrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['SellerOrderItem'] = ResolversParentTypes['SellerOrderItem']> = {
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   buyer_name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   image_url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -683,7 +821,9 @@ export type IsOnboardedResponseResolvers<ContextType = any, ParentType extends R
 };
 
 export type Resolvers<ContextType = any> = {
+  AddAddressResponse?: AddAddressResponseResolvers<ContextType>;
   AddUserInfoResponse?: AddUserInfoResponseResolvers<ContextType>;
+  Address?: AddressResolvers<ContextType>;
   BuyerOrderItem?: BuyerOrderItemResolvers<ContextType>;
   ChangeInventoryResponse?: ChangeInventoryResponseResolvers<ContextType>;
   DelistProductResponse?: DelistProductResponseResolvers<ContextType>;
@@ -692,7 +832,9 @@ export type Resolvers<ContextType = any> = {
   FetchOrderItemsForSellerResponse?: FetchOrderItemsForSellerResponseResolvers<ContextType>;
   FetchUserPrivateInfoResponse?: FetchUserPrivateInfoResponseResolvers<ContextType>;
   FetchUserPublicInfoResponse?: FetchUserPublicInfoResponseResolvers<ContextType>;
+  GetAddresses?: GetAddressesResolvers<ContextType>;
   GetEnlistedProductsResponse?: GetEnlistedProductsResponseResolvers<ContextType>;
+  GiveRatingResponse?: GiveRatingResponseResolvers<ContextType>;
   HandleOrderResponse?: HandleOrderResponseResolvers<ContextType>;
   LoginUserResponse?: LoginUserResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -702,6 +844,7 @@ export type Resolvers<ContextType = any> = {
   PublicUserInfo?: PublicUserInfoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   RegisterUserResponse?: RegisterUserResponseResolvers<ContextType>;
+  RemoveAddressResponse?: RemoveAddressResponseResolvers<ContextType>;
   SearchProductResponse?: SearchProductResponseResolvers<ContextType>;
   SellerOrderItem?: SellerOrderItemResolvers<ContextType>;
   TrendingLatestProducts?: TrendingLatestProductsResolvers<ContextType>;

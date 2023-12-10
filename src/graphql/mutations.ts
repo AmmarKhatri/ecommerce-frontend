@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem, HandleOrder } from "@/types/graphql";
+import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem, HandleOrder, GiveRating } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -203,6 +203,7 @@ export const changeInventory = async ({
 }
 
 export const createOrder = async ({
+  address,
   cart
 }: PlaceOrder, { headers }: { headers?: any }) =>{
   return await graphQlApiHandler<
@@ -224,6 +225,7 @@ export const createOrder = async ({
     `,
     variables: {
       input: {
+        address,
         cart
       },
     },
@@ -271,4 +273,40 @@ export const handleOrder = async ({
   });
 }
 
+export const giveRating = async ({
+  rating,
+  order_id,
+  product_id,
+  comment
+}: GiveRating, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: GiveRating;
+    },
+    {
+      giveRating: Mutation["giveRating"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation GiveRatingMutation($input: GiveRating!) {
+        giveRating(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        rating,
+        order_id,
+        product_id,
+        comment
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
 
