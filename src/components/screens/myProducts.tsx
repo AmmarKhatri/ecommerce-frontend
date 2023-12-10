@@ -110,7 +110,7 @@ export default function MyProducts() {
                                     <DialogTrigger>
                                         <Edit/>
                                     </DialogTrigger>
-                                    <InventoryPopup product_id={prod.id} curr={parseInt(prod.quantity)} index={i} products={productList} setProducts={setProductList}/>
+                                    <InventoryPopup product_id={prod.id} curr={prod.quantity} index={i} products={productList} setProducts={setProductList}/>
                                 </Dialog>
                             </TableCell>
                             <TableCell>

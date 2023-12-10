@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { Query, SearchProduct } from "@/types/graphql";
+import { BuyerOrderItem, FetchOrderItemsForBuyer, Query, SearchProduct } from "@/types/graphql";
 
 export const isOnboarded = async ({ headers }: { headers?: any }) => {
   return await graphQlApiHandler<
@@ -94,14 +94,14 @@ export const fetchProducts = async () => {
 
 export const searchProducts = async ({text}: SearchProduct, { headers }: { headers?: any }) => {
   return await graphQlApiHandler<
-    SearchProduct,
+    {input: SearchProduct},
     {
       searchProducts: Query["searchProducts"];
     }
   >({
     query: /* GraphQL */ `
-      query SearchProductsQuery {
-        searchProducts {
+      query SearchProductsQuery($input: SearchProduct!) {
+        searchProducts(input: $input) {
           message
           status
           products {
@@ -111,10 +111,57 @@ export const searchProducts = async ({text}: SearchProduct, { headers }: { heade
             quantity
             price
             image_url
+            seller_id
             created_at
           }
         }
       }
-    `
+    `,
+    variables: {
+      input: {
+        text
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+};
+
+export const fetchOrderItemsForBuyer = async ({status}: FetchOrderItemsForBuyer, { headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    {input: FetchOrderItemsForBuyer},
+    {
+      fetchOrderItemsForBuyer: Query["fetchOrderItemsForBuyer"];
+    }
+  >({
+    query: /* GraphQL */ `
+      query FetchOrderItemsForBuyerQuery($input: FetchOrderItemsForBuyer!) {
+        fetchOrderItemsForBuyer(input: $input) {
+          message
+          status
+          orders {
+            id
+            image_url
+            name
+            order_reference
+            price
+            product_id
+            quantity
+            status
+          }
+        }
+      }
+    `,
+    variables: {
+      input: {
+        status
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
   });
 };

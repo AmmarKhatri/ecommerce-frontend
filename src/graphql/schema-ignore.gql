@@ -79,7 +79,7 @@ type Product {
   description: String!
   image_url: String!
   price: Float!
-  quantity: String!
+  quantity: Int!
   created_at: String!
   updated_at: String!
 }
@@ -134,6 +134,33 @@ type SearchProductResponse {
   message: String!
   products: [Product!]
 }
+#place an order
+input PlaceOrder {
+  cart: [[Int]!]!
+}
+type PlaceOrderResponse {
+  status: Int!
+  message: String!
+  order_reference: Int
+}
+input FetchOrderItemsForBuyer {
+  status: String!
+}
+type BuyerOrderItem {
+  id: Int!
+  product_id: Int!
+  name: String!
+  quantity: Int!
+  status: String!
+  order_reference: Int!
+  price: Float!
+  image_url: String!
+}
+type FetchOrderItemsForBuyerResponse {
+  message: String!
+  status: Int!
+  orders: [BuyerOrderItem!]
+}
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
@@ -141,6 +168,7 @@ type Query {
   getEnlistedProducts: GetEnlistedProductsResponse!
   fetchProducts: TrendingLatestProducts!
   searchProducts(input: SearchProduct): SearchProductResponse!
+  fetchOrderItemsForBuyer(input: FetchOrderItemsForBuyer): FetchOrderItemsForBuyerResponse!
 }
 
 type Mutation {
@@ -151,4 +179,5 @@ type Mutation {
   enlistProduct(input: EnlistProduct): EnlistProductResponse!
   delistProduct(input: DelistProduct): DelistProductResponse!
   changeInventory(input: ChangeInventory): ChangeInventoryResponse!
+  placeOrder(input: PlaceOrder): PlaceOrderResponse!
 }
