@@ -8,6 +8,9 @@ import {
   } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
 import MyProducts from "../screens/myProducts"
+import SellerPending from "../screens/sellerScreens/pending"
+import SellerFulfilled from "../screens/sellerScreens/fulfilled"
+import SellerCancelled from "../screens/sellerScreens/cancelled"
 export default function SellerDashboard() {
     
     react.useEffect(()=>{
@@ -28,13 +31,13 @@ export default function SellerDashboard() {
                     <MyProducts/>
                 </TabsContent>
                 <TabsContent value="pending">
-
+                    <SellerPending/>
                 </TabsContent>
                 <TabsContent value="fulfilled">
-
+                    <SellerFulfilled/>
                 </TabsContent>
                 <TabsContent value="cancelled">
-
+                    <SellerCancelled/>
                 </TabsContent>
             </Tabs>
         </div>

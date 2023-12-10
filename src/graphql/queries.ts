@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { BuyerOrderItem, FetchOrderItemsForBuyer, Query, SearchProduct } from "@/types/graphql";
+import { BuyerOrderItem, FetchOrderItemsForBuyer, FetchOrderItemsForSeller, Query, SearchProduct } from "@/types/graphql";
 
 export const isOnboarded = async ({ headers }: { headers?: any }) => {
   return await graphQlApiHandler<
@@ -145,6 +145,44 @@ export const fetchOrderItemsForBuyer = async ({status}: FetchOrderItemsForBuyer,
             id
             image_url
             name
+            order_reference
+            price
+            product_id
+            quantity
+            status
+          }
+        }
+      }
+    `,
+    variables: {
+      input: {
+        status
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+};
+
+export const fetchOrderItemsForSeller = async ({status}: FetchOrderItemsForSeller, { headers }: { headers?: any }) => {
+  return await graphQlApiHandler<
+    {input: FetchOrderItemsForSeller},
+    {
+      fetchOrderItemsForSeller: Query["fetchOrderItemsForSeller"];
+    }
+  >({
+    query: /* GraphQL */ `
+      query FetchOrderItemsForBuyerQuery($input: FetchOrderItemsForSeller!) {
+        fetchOrderItemsForSeller(input: $input) {
+          message
+          status
+          orders {
+            id
+            image_url
+            name
+            buyer_name
             order_reference
             price
             product_id

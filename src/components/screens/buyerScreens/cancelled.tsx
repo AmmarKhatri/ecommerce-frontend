@@ -47,7 +47,7 @@ export default function Cancelled(){
                 <TableRow>
                     <TableHead className="w-[100px]">Order ID</TableHead>
                     <TableHead className="w-[100px]">Product</TableHead>
-                    <TableHead className="w-[150px">Name</TableHead>
+                    <TableHead className="w-[150px]">Name</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>

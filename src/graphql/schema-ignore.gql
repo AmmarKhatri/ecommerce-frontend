@@ -161,6 +161,35 @@ type FetchOrderItemsForBuyerResponse {
   status: Int!
   orders: [BuyerOrderItem!]
 }
+input FetchOrderItemsForSeller {
+  status: String!
+}
+type SellerOrderItem {
+  id: Int!
+  product_id: Int!
+  name: String!
+  buyer_name: String!
+  quantity: Int!
+  status: String!
+  order_reference: Int!
+  price: Float!
+  image_url: String!
+}
+type FetchOrderItemsForSellerResponse {
+  message: String!
+  status: Int!
+  orders: [SellerOrderItem!]
+}
+input HandleOrder {
+  product_id: Int!
+  order_id: Int!
+  quantity: Int!
+  deliver: Boolean!
+}
+type HandleOrderResponse {
+  message: String!
+  status: Int!
+}
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
@@ -168,7 +197,12 @@ type Query {
   getEnlistedProducts: GetEnlistedProductsResponse!
   fetchProducts: TrendingLatestProducts!
   searchProducts(input: SearchProduct): SearchProductResponse!
-  fetchOrderItemsForBuyer(input: FetchOrderItemsForBuyer): FetchOrderItemsForBuyerResponse!
+  fetchOrderItemsForBuyer(
+    input: FetchOrderItemsForBuyer
+  ): FetchOrderItemsForBuyerResponse!
+  fetchOrderItemsForSeller(
+    input: FetchOrderItemsForSeller
+  ): FetchOrderItemsForSellerResponse!
 }
 
 type Mutation {
@@ -180,4 +214,5 @@ type Mutation {
   delistProduct(input: DelistProduct): DelistProductResponse!
   changeInventory(input: ChangeInventory): ChangeInventoryResponse!
   placeOrder(input: PlaceOrder): PlaceOrderResponse!
+  handleOrder(input: HandleOrder): HandleOrderResponse!
 }

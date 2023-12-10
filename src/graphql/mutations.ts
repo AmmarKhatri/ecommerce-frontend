@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem } from "@/types/graphql";
+import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem, HandleOrder } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -233,4 +233,42 @@ export const createOrder = async ({
     }
   });
 }
+
+export const handleOrder = async ({
+  deliver,
+  order_id,
+  product_id,
+  quantity
+}: HandleOrder, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: HandleOrder;
+    },
+    {
+      handleOrder: Mutation["handleOrder"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation HandleOrderMutation($input: HandleOrder!) {
+        handleOrder(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        deliver,
+        order_id,
+        product_id,
+        quantity
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
+
 

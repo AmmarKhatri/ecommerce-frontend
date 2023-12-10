@@ -1,15 +1,14 @@
-import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "@/components/ui/use-toast"
-import { fetchOrderItemsForBuyer } from "@/graphql/queries"
-import { BuyerOrderItem } from "@/types/graphql"
+import { fetchOrderItemsForSeller } from "@/graphql/queries"
+import { SellerOrderItem } from "@/types/graphql"
 import { useEffect, useState } from "react"
 
-export default function Fulfilled(){
+export default function SellerCancelled(){
     async function fetchOrderItems(){
-        const response = await fetchOrderItemsForBuyer({status: "fulfilled"}, {})
-        if ('data' in response && response.data.data?.fetchOrderItemsForBuyer) {
-            const {message, status, orders} = response.data.data?.fetchOrderItemsForBuyer;
+        const response = await fetchOrderItemsForSeller({status: "cancelled"}, {})
+        if ('data' in response && response.data.data?.fetchOrderItemsForSeller) {
+            const {message, status, orders} = response.data.data?.fetchOrderItemsForSeller;
             // Now you can use 'message' and 'status' as needed
             console.log("Message:", message);
             console.log("Status:", status);
@@ -23,7 +22,7 @@ export default function Fulfilled(){
             } else {
               toast({
                 variant: "default",
-                title: "Fulfilled Orders",
+                title: "Cancelled Orders",
                 description: message
               })
               if (orders){
@@ -38,16 +37,17 @@ export default function Fulfilled(){
     useEffect(()=>{
         fetchOrderItems()
     },[])
-    const [orderItems, setOrderItems] = useState<BuyerOrderItem[]>([])
+    const [orderItems, setOrderItems] = useState<SellerOrderItem[]>([])
     return(
     <>
     {orderItems.length !== 0 ?<div><Table>
-        <TableCaption> Fulfilled Orders List</TableCaption>
+        <TableCaption> Pending Orders List</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">Order ID</TableHead>
                     <TableHead className="w-[100px]">Product</TableHead>
                     <TableHead className="w-[150px]">Name</TableHead>
+                    <TableHead>Buyer Name</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className=" text-center">Quantity</TableHead>
                     <TableHead className="text-right">Price</TableHead>
@@ -58,18 +58,18 @@ export default function Fulfilled(){
             {
                 orderItems.map((prod, i) =>(
                     <TableRow key={prod.id}>
-                        <TableCell className=" text-center">{prod.order_reference}</TableCell>
+                        <TableCell className=" text-center">{prod.id}</TableCell>
                         <TableCell><img src={prod.image_url} className=" w-10 h-10"/></TableCell>
                         <TableCell>{prod.name}</TableCell>
+                        <TableCell>{prod.buyer_name}</TableCell>
                         <TableCell>{prod.status}</TableCell>
                         <TableCell className=" text-center">{prod.quantity}</TableCell>
                         <TableCell  className="text-right">${prod.price}</TableCell>
-                        <TableCell  className="text-center">${(prod.price * prod.quantity).toFixed(2)}
-                        </TableCell>
+                        <TableCell  className="text-center">${(prod.price * prod.quantity).toFixed(2)}</TableCell>
                     </TableRow>
                 ))
             }
         </TableBody>
-    </Table></div>: <div className=" text-center text-gray-700 mt-96 font-bold">No fulfilled orders</div>}
+    </Table></div>: <div className=" text-center text-gray-800 mt-96 font-bold">No cancelled orders!</div>}
 </>)
 }

@@ -90,7 +90,6 @@ export default function Cart(){
                             className="h-24 w-24 rounded-lg object-cover object-center sm:h-32 sm:w-32"
                             />
                         </div>
-
                         <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
                             <div>
                             <div className="flex justify-between sm:grid sm:grid-cols-2">
