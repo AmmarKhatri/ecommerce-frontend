@@ -1,18 +1,19 @@
 'use client';
 import Tick from "@/components/extras/check";
 import BuyerDashboardHeader from "@/components/header/buyerDashboardHeader";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import useCart, { CartProduct } from "@/context/CartStorage";
+import { CartProduct, useCartContext } from "@/context/CartContext";
+// import useCart, { CartProduct } from "@/context/CartStorage";
 import { createOrder } from "@/graphql/mutations";
 import { getAddresses } from "@/graphql/queries";
 import { Address } from "@/types/graphql";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 export default function Cart(){
-    const {cart, updateCart, removeProduct, clearCart} = useCart()
+    // const {cart, updateCart, removeProduct, clearCart} = useCart()
     const [add, setAdd] = useState<Address[]>()
+    const { cart, clearCart, updateCart, removeProduct } = useCartContext();
     const [selAdd, setSelAdd] = useState(-1)
     // Calculate subtotal
     const subtotal = cart.reduce((total, product) => {
@@ -42,18 +43,16 @@ export default function Cart(){
           }
     }
     useEffect(()=>{
-        if (typeof window !== 'undefined') {
-            console.log("Fetch addresses was run")
-            fetchAddresses()
-        }
+        console.log("Fetch addresses was run")
+        fetchAddresses()
     }, [])
     async function handleCheckout(){
         if (selAdd === -1){
-            // toast({
-            //     variant: "destructive",
-            //     title: "Address not selected",
-            //     description: "An address must be selected to place an order"
-            // })
+            toast({
+                variant: "destructive",
+                title: "Address not selected",
+                description: "An address must be selected to place an order"
+            })
             alert("Please select an address")
             return
         }
@@ -88,7 +87,7 @@ export default function Cart(){
             console.log(response);
           }
     }
-    async function handleAdd(prod: CartProduct){
+    function handleAdd(prod: CartProduct){
         updateCart({
             id: prod.id,
             name: prod.name,
@@ -100,7 +99,7 @@ export default function Cart(){
             image_url: prod.image_url
           })
     }
-    async function handleSub(prod: CartProduct){
+    function handleSub(prod: CartProduct){
         updateCart({
             id: prod.id,
             name: prod.name,
@@ -155,9 +154,9 @@ export default function Cart(){
                             <div className="mt-4 flex items-center sm:absolute sm:left-1/2 sm:top-0 sm:mt-0 sm:block">
                                 
                                 <div className=" space-x-8">
-                                    <button className=" bg-slate-200 px-2 rounded-full" onClick={()=>{handleSub(product)}}>-</button>
+                                    <button className=" bg-slate-200 px-2 rounded-full" onClick={()=>handleSub(product)}>-</button>
                                     <span>{product.selected_qty}</span>
-                                    <button className=" bg-slate-200 px-1.5 rounded-full"onClick={()=>{handleAdd(product)}}>+</button>
+                                    <button className=" bg-slate-200 px-1.5 rounded-full"onClick={()=>handleAdd(product)}>+</button>
                                 </div>
                                 <div>
                                     <button className="sm pt-4 px-5" onClick={()=>{handleRemove(product.id)}}>Remove</button>
