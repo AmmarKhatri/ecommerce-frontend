@@ -11,6 +11,7 @@ import { toast } from "../ui/use-toast";
 import Pending from "../screens/buyerScreens/pending";
 import Fulfilled from "../screens/buyerScreens/fulfilled";
 import Cancelled from "../screens/buyerScreens/cancelled";
+import Reviewed from "../screens/buyerScreens/reviewed";
 export default function BuyerDashboard() {
   const [isSearching, setIsSearching] = useState(false)
   const [text, setText] = useState("")
@@ -78,6 +79,7 @@ export default function BuyerDashboard() {
               <TabsTrigger value="pending">Pending Orders</TabsTrigger>
               <TabsTrigger value="fulfilled">Fulfilled Orders</TabsTrigger>
               <TabsTrigger value="cancelled">Cancelled Orders</TabsTrigger>
+              <TabsTrigger value="reviewed">Reviewed Orders</TabsTrigger>
             </TabsList>
             <TabsContent value="catalog">
               <Catalog/>
@@ -90,6 +92,9 @@ export default function BuyerDashboard() {
             </TabsContent>
             <TabsContent value="cancelled">
               <Cancelled/>
+            </TabsContent>
+            <TabsContent value="reviewed">
+              <Reviewed/>
             </TabsContent>
           </Tabs>
         </div>

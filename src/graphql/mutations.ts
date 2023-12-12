@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem, HandleOrder, GiveRating } from "@/types/graphql";
+import { AddUserInfo, LoginUser, Mutation, RegisterUser, EnlistProduct, DelistProduct, ChangeInventory, PlaceOrder, BuyerOrderItem, HandleOrder, GiveRating, AddAddress, RemoveAddress } from "@/types/graphql";
 
 export const registerAccount = async ({
   email,
@@ -301,6 +301,74 @@ export const giveRating = async ({
         order_id,
         product_id,
         comment
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
+
+export const addAddress = async ({
+  add1,
+  add2,
+  city,
+  postal_code
+}: AddAddress, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: AddAddress;
+    },
+    {
+      addAddress: Mutation["addAddress"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation AddAddressMutation($input: AddAddress!) {
+        addAddress(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        add1,
+        add2,
+        city,
+        postal_code
+      },
+    },
+    headers:{
+      'Authorization': "Bearer "+ getAuthToken(),
+      ...headers,
+    }
+  });
+}
+
+export const removeAddress = async ({
+  id
+}: RemoveAddress, { headers }: { headers?: any }) =>{
+  return await graphQlApiHandler<
+    {
+      input: RemoveAddress;
+    },
+    {
+      removeAddress: Mutation["removeAddress"];
+    }
+  >({
+    query: /* GraphQL */ `
+      mutation RemoveAddressMutation($input: RemoveAddress!) {
+        removeAddress(input: $input){
+          message
+          status
+        }
+      }
+    `,
+    variables: {
+      input: {
+        id
       },
     },
     headers:{

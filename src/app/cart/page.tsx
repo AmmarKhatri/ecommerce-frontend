@@ -1,12 +1,14 @@
 'use client';
 import Tick from "@/components/extras/check";
 import BuyerDashboardHeader from "@/components/header/buyerDashboardHeader";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import useCart, { CartProduct } from "@/context/CartStorage";
 import { createOrder } from "@/graphql/mutations";
 import { getAddresses } from "@/graphql/queries";
 import { Address } from "@/types/graphql";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 export default function Cart(){
     const {cart, updateCart, removeProduct, clearCart} = useCart()
@@ -31,6 +33,7 @@ export default function Cart(){
                 description: message
               })
             } else {
+                console.log(addresses)
                 setAdd([...addresses])
             }
           } else {
@@ -39,14 +42,27 @@ export default function Cart(){
           }
     }
     useEffect(()=>{
-        fetchAddresses()
+        if (typeof window !== 'undefined') {
+            console.log("Fetch addresses was run")
+            fetchAddresses()
+        }
     }, [])
     async function handleCheckout(){
+        if (selAdd === -1){
+            // toast({
+            //     variant: "destructive",
+            //     title: "Address not selected",
+            //     description: "An address must be selected to place an order"
+            // })
+            alert("Please select an address")
+            return
+        }
         let list = []
         for(let i = 0; i < cart.length; i++){
+            console.log("Printing")
             list.push([cart[i].id, cart[i].selected_qty])
         }
-        const response = await createOrder({address: 1, cart: list},{})
+        const response = await createOrder({address: selAdd, cart: list},{})
         if ('data' in response && response.data.data?.placeOrder) {
             const {message, status, order_reference} = response.data.data?.placeOrder;
             // Now you can use 'message' and 'status' as needed
@@ -113,7 +129,7 @@ export default function Cart(){
 
                     <ul role="list" className="divide-y divide-gray-200 border-b border-t border-gray-200">
                     {cart.map((product, productIdx) => (
-                        <li key={product.id} className="flex py-6 sm:py-10">
+                        <li className="flex py-6 sm:py-10">
                         <div className="flex-shrink-0">
                             <img
                             src={product.image_url}
@@ -199,6 +215,11 @@ export default function Cart(){
                         Checkout
                     </button>
                     </div>
+                    <div className=" flex flex-1 pt-5 px-3 justify-between">
+                        <div className=" font-bold">Select an Address</div>
+                        <Link href={"/address"} className=" hover:font-bold">+ Add an address</Link>
+                    </div>
+                    <div className=" py-3">
                     <Select value={selAdd.toString()} onValueChange={(value: string)=> setSelAdd(parseInt(value))}>
                         <SelectTrigger className="w-full mb-5">
                             <SelectValue placeholder="Select an address" />
@@ -209,6 +230,7 @@ export default function Cart(){
                             ))}
                         </SelectContent>
                     </Select>
+                    </div>
                     <div className="mt-6 text-center text-sm text-gray-500">
                     <p>
                         or 

@@ -214,8 +214,8 @@ export const getAddresses = async ({ headers }: { headers?: any }) => {
     }
   >({
     query: /* GraphQL */ `
-      query GetAddressesQuery() {
-        fetchOrderItemsForBuyer() {
+      query GetAddressesQuery {
+        getAddresses {
           message
           status
           addresses {
