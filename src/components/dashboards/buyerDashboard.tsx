@@ -28,7 +28,7 @@ export default function BuyerDashboard() {
   const [text, setText] = useState("");
   const [searchList, setSearchList] = useState<Product[]>([]);
   // const { cart, updateCart } = useCart();
-
+  
   async function handleCart(prod: Product){
     updateCart({
       id: prod.id,
