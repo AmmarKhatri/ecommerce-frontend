@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/context/AuthStorage";
 import { graphQlApiHandler } from "@/lib/helper";
-import { BuyerOrderItem, FetchOrderItemsForBuyer, FetchOrderItemsForSeller, Query, SearchProduct } from "@/types/graphql";
+import { BuyerOrderItem, FetchOrderItemsForBuyer, FetchOrderItemsForSeller, GetProduct, Query, SearchProduct } from "@/types/graphql";
 
 export const isOnboarded = async ({ headers }: { headers?: any }) => {
   return await graphQlApiHandler<
@@ -235,5 +235,46 @@ export const getAddresses = async ({ headers }: { headers?: any }) => {
       'Authorization': "Bearer "+ getAuthToken(),
       ...headers,
     }
+  });
+};
+
+export const getProduct = async (id: number) => {
+  return await graphQlApiHandler<
+    {input: GetProduct},
+    {
+      getProduct: Query["getProduct"];
+    }
+  >({
+    query: /* GraphQL */ `
+      query GetProductQuery($input: GetProduct) {
+        getProduct(input: $input) {
+          message
+          product {
+            id
+            name
+            description
+            image_url
+            count
+            quantity
+            seller_id
+            average_rating
+            price
+            seller_name
+          }
+          reviews {
+            buyer_name
+            comment
+            id
+            rating
+          }
+          status
+        }
+      } 
+    `,
+    variables: {
+      input: {
+        id
+      },
+    },
   });
 };

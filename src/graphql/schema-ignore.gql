@@ -240,6 +240,34 @@ type GetAddresses {
   message: String!
   addresses: [Address!]!
 }
+#get product
+type PageProduct {
+  id: Int!
+  image_url: String!
+  name: String!
+  description: String!
+  price: Float!
+  seller_name: String!
+  quantity: Int!
+  seller_id: Int!
+  average_rating: Float!
+  count: Int!
+}
+type CustomerReviews {
+  id: Int!
+  rating: Int!
+  comment: String
+  buyer_name: String!
+}
+input GetProduct {
+  id: Int!
+}
+type GetProductResponse {
+  message: String!
+  status: Int!
+  product: PageProduct
+  reviews: [CustomerReviews!]
+}
 type Query {
   isOnboarded: isOnboardedResponse!
   fetchUserPublicInfo(input: FetchUserPublicInfo): FetchUserPublicInfoResponse!
@@ -254,6 +282,7 @@ type Query {
     input: FetchOrderItemsForSeller
   ): FetchOrderItemsForSellerResponse!
   getAddresses: GetAddresses!
+  getProduct(input: GetProduct): GetProductResponse!
 }
 type Mutation {
   addUserInfo(input: AddUserInfo): AddUserInfoResponse!

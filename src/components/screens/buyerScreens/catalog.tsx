@@ -65,7 +65,7 @@ export default function Catalog(){
                 <div className="mt-4 flex justify-between bg-gray-100 py-3 px-6 rounded-md">
                   <div>
                     <h3 className="text-sm text-gray-700 font-bold">
-                      <a href={"./login"}>
+                      <a href={"./product?id="+product.id}>
                         <span aria-hidden="true" className="absolute inset-0" />
                         {product.name}
                       </a>
@@ -97,7 +97,7 @@ export default function Catalog(){
                 <div className="mt-4 flex justify-between bg-gray-100 py-3 px-6 rounded-md">
                   <div>
                     <h3 className="text-sm text-gray-700 font-bold">
-                      <a href={"./login"}>
+                      <a href={"./product?id="+product.id}>
                         <span aria-hidden="true" className="absolute inset-0" />
                         {product.name}
                       </a>

@@ -59,7 +59,7 @@ export default function BuyerDashboardHeader({setIsSearching, text, setText, set
         <div className="flex items-center">
           <span className=" text-3xl font-bold">Buyer Dashboard</span>
         </div>
-        {pathname !== '/cart' && pathname !== '/address' ?<div className=" flex items-center space-x-4">
+        {pathname !== '/cart' && pathname !== '/address' && pathname !== '/product' ?<div className=" flex items-center space-x-4">
           <Input
             type="search"
             placeholder="Search Products..."
