@@ -45,47 +45,48 @@ export default function Cart(){
     useEffect(()=>{
         console.log("Fetch addresses was run")
         fetchAddresses()
+        console.log("Product cart",cart)
     }, [])
-    async function handleCheckout(){
+    async function handleCheckout(event: React.MouseEvent){
+        event.preventDefault();
         if (selAdd === -1){
             toast({
                 variant: "destructive",
                 title: "Address not selected",
                 description: "An address must be selected to place an order"
             })
-            alert("Please select an address")
-            return
-        }
-        let list = []
-        for(let i = 0; i < cart.length; i++){
-            console.log("Printing")
-            list.push([cart[i].id, cart[i].selected_qty])
-        }
-        const response = await createOrder({address: selAdd, cart: list},{})
-        if ('data' in response && response.data.data?.placeOrder) {
-            const {message, status, order_reference} = response.data.data?.placeOrder;
-            // Now you can use 'message' and 'status' as needed
-            console.log("Message:", message);
-            console.log("Status:", status);
-            // Add your logic here based on the response data
-            if (status !== 201){
-              toast({
-                variant: "destructive",
-                title: "Error: Status "+ status,
-                description: message
-              })
-            } else {
-              toast({
-                variant: "default",
-                title: "Order Placed | ID: "+order_reference,
-                description: message
-              })
-              clearCart()
+        } else {
+            let list = []
+            for(let i = 0; i < cart.length; i++){
+                console.log("Printing")
+                list.push([cart[i].id, cart[i].selected_qty])
             }
-          } else {
-            console.error("GraphQL response is missing data:", response);
-            console.log(response);
-          }
+            const response = await createOrder({address: selAdd, cart: list},{})
+            if ('data' in response && response.data.data?.placeOrder) {
+                const {message, status, order_reference} = response.data.data?.placeOrder;
+                // Now you can use 'message' and 'status' as needed
+                console.log("Message:", message);
+                console.log("Status:", status);
+                // Add your logic here based on the response data
+                if (status !== 201){
+                toast({
+                    variant: "destructive",
+                    title: "Error: Status "+ status,
+                    description: message
+                })
+                } else {
+                toast({
+                    variant: "default",
+                    title: "Order Placed | ID: "+order_reference,
+                    description: message
+                })
+                clearCart()
+                }
+            } else {
+                console.error("GraphQL response is missing data:", response);
+                console.log(response);
+            }
+            }
     }
     function handleAdd(event: React.MouseEvent, prod: CartProduct){
         event.preventDefault();
@@ -114,14 +115,15 @@ export default function Cart(){
             image_url: prod.image_url
           })
     }
-    async function handleRemove(id: number){
+    async function handleRemove(event: React.MouseEvent, id: number){
+        event.preventDefault();
         removeProduct(id)
     }
 
     return(
         <div>
             <BuyerDashboardHeader/>
-            <div className="bg-white">
+            <div className="bg-white" >
             <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-12 lg:px-8">
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900">Shopping Cart</h1>
 
@@ -162,7 +164,7 @@ export default function Cart(){
                                     <button className=" bg-slate-200 px-1.5 rounded-full"onClick={(e)=>handleAdd(e,product)}>+</button>
                                 </div>
                                 <div>
-                                    <button className="sm pt-4 px-5" onClick={()=>{handleRemove(product.id)}}>Remove</button>
+                                    <button className="sm pt-4 px-5" onClick={(e)=>{handleRemove(e,product.id)}}>Remove</button>
                                 </div>
                                 
                             </div>
@@ -211,7 +213,7 @@ export default function Cart(){
                     <div className="mt-10">
                     <button
                         type="submit"
-                        onClick={handleCheckout}
+                        onClick={(e)=>{handleCheckout(e)}}
                         className="w-full rounded-md border border-transparent bg-black px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-50"
                     >
                         Checkout

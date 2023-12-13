@@ -16,21 +16,15 @@ interface CartContextProps {
   cart: CartProduct[];
   updateCart: (product: CartProduct) => void;
   getCart: () => CartProduct[];
-  // addToCart: (product: CartProduct) => void;
   removeProduct: (id: number) => void;
-  // increase: (id: number) => void;
-  // decrease: (id: number) => void;
   clearCart: () => void;
 }
 
 export const CartContext = createContext<CartContextProps>({
   cart: [],
-  // addToCart: () => {},
   getCart: () => [],
   removeProduct: () => {},
   updateCart: () => {},
-  // increase: () => {},
-  // decrease: () => {},
   clearCart: () => {},
 });
 
@@ -39,14 +33,10 @@ export const useCartContext = () => useContext(CartContext);
 export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [cart, setCart] = useState<CartProduct[]>([]);
+  let initialCart: CartProduct[] = []
+  initialCart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const [cart, setCart] = useState<CartProduct[]>(initialCart);
   console.log("My cart: ", cart)
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-  }, []);
   function updateProductQuantity(id:number, delta:number) {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -65,11 +55,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-  // console.log("add to cart trigger nwe state,",cart)
-  // const addToCart = (product: Product) => {
-  //   console.log("add to cart trigger")
-  //   setCart((prevCart) => [...prevCart, product]);
-  // };
 
   const removeProduct = (id: number) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
@@ -85,21 +70,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
       setCart((prevCart) => [...prevCart, product]);
     }
   }
-  // const increase = (id: number) => {
-  //   setCart((prevCart) =>
-  //     prevCart.map((item) =>
-  //       item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-  //     )
-  //   );
-  // };
-
-  // const decrease = (id: number) => {
-  //   setCart((prevCart) =>
-  //     prevCart.map((item) =>
-  //       item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-  //     )
-  //   );
-  // };
   const getCart = () =>{
     return cart;
   }
@@ -113,10 +83,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
         cart,
         getCart,
         updateCart,
-        // addToCart,
         removeProduct,
-        // increase,
-        // decrease,
         clearCart,
       }}
     >
