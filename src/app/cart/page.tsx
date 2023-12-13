@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export default function Cart(){
     // const {cart, updateCart, removeProduct, clearCart} = useCart()
     const [add, setAdd] = useState<Address[]>()
-    const { cart, clearCart, updateCart, removeProduct } = useCartContext();
+    const { cart ,clearCart, updateCart, removeProduct } = useCartContext();
     const [selAdd, setSelAdd] = useState(-1)
     // Calculate subtotal
     const subtotal = cart.reduce((total, product) => {
@@ -87,7 +87,8 @@ export default function Cart(){
             console.log(response);
           }
     }
-    function handleAdd(prod: CartProduct){
+    function handleAdd(event: React.MouseEvent, prod: CartProduct){
+        event.preventDefault();
         updateCart({
             id: prod.id,
             name: prod.name,
@@ -97,9 +98,11 @@ export default function Cart(){
             price: prod.price,
             seller_id: prod.seller_id,
             image_url: prod.image_url
-          })
+        })
+        
     }
-    function handleSub(prod: CartProduct){
+    function handleSub(event: React.MouseEvent, prod: CartProduct){
+        event.preventDefault();
         updateCart({
             id: prod.id,
             name: prod.name,
@@ -154,9 +157,9 @@ export default function Cart(){
                             <div className="mt-4 flex items-center sm:absolute sm:left-1/2 sm:top-0 sm:mt-0 sm:block">
                                 
                                 <div className=" space-x-8">
-                                    <button className=" bg-slate-200 px-2 rounded-full" onClick={()=>handleSub(product)}>-</button>
+                                    <button className=" bg-slate-200 px-2 rounded-full" onClick={(e)=>handleSub(e,product)}>-</button>
                                     <span>{product.selected_qty}</span>
-                                    <button className=" bg-slate-200 px-1.5 rounded-full"onClick={()=>handleAdd(product)}>+</button>
+                                    <button className=" bg-slate-200 px-1.5 rounded-full"onClick={(e)=>handleAdd(e,product)}>+</button>
                                 </div>
                                 <div>
                                     <button className="sm pt-4 px-5" onClick={()=>{handleRemove(product.id)}}>Remove</button>

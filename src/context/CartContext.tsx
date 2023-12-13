@@ -15,6 +15,7 @@ export interface CartProduct {
 interface CartContextProps {
   cart: CartProduct[];
   updateCart: (product: CartProduct) => void;
+  getCart: () => CartProduct[];
   // addToCart: (product: CartProduct) => void;
   removeProduct: (id: number) => void;
   // increase: (id: number) => void;
@@ -25,6 +26,7 @@ interface CartContextProps {
 export const CartContext = createContext<CartContextProps>({
   cart: [],
   // addToCart: () => {},
+  getCart: () => [],
   removeProduct: () => {},
   updateCart: () => {},
   // increase: () => {},
@@ -38,7 +40,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [cart, setCart] = useState<CartProduct[]>([]);
-
+  console.log("My cart: ", cart)
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
@@ -98,7 +100,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   //     )
   //   );
   // };
-
+  const getCart = () =>{
+    return cart;
+  }
   const clearCart = () => {
     setCart([]);
   };
@@ -107,6 +111,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
     <CartContext.Provider
       value={{
         cart,
+        getCart,
         updateCart,
         // addToCart,
         removeProduct,
